@@ -41,9 +41,19 @@ def get_audio_features(data, soundtrack_id):
 	audio_features = ['acousticness','danceability','duration_ms','energy','instrumentalness','key','liveness','loudness','mode','speechiness','tempo','time_signature','valence']
 	return np.array(data[data['soundtrack_id']=='6aNwvrNOT6NmcxWTHlVFSC'][audio_features])[0]
 
+# load metadata from imdb dump of title.basics.tsv.gz
+def load_titles_basic_metadata(path = '/data/corpora/imdb/title.basics.tsv'):
+  return pd.read_csv(path,sep='\t')
+
+def load_data_with_metadata():
+  data = load_data()
+  titles_metadata = load_titles_basic_metadata()
+  return data.merge(titles_metadata,left_on='movie_id',right_on='tconst',how='left')
+
 def load_data():
 	data = load_flat_soundtracks().merge(load_subtitle_paths()).merge(load_audio_features())
 	subtitles = load_subtitles()
 	data.reset_index(inplace=True)
 	subtitles.reset_index(inplace=True)
-	return data.merge(subtitles)
+	data = data.merge(subtitles)
+  return data
