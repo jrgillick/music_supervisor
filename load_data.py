@@ -50,10 +50,31 @@ def load_data_with_metadata():
   titles_metadata = load_titles_basic_metadata()
   return data.merge(titles_metadata,left_on='movie_id',right_on='tconst',how='left')
 
+def pad_id(m):
+	if len(m) == 9:
+		return m
+	else:
+		prefix = 'tt'
+		suffix = m.split(prefix)[-1]
+		pad_length = 7-len(suffix)
+		pad_str = ''.join(list(np.zeros(pad_length).astype(np.int32).astype(str)))
+		return prefix+pad_str+suffix
+
+def fix_movie_ids(data):
+	movie_ids = data.movie_id
+	movie_ids = [pad_id(m) for m in movie_ids]
+	data.movie_id = movie_ids
+	return data
+
+def load_ratings(path='/data/corpora/imdb/title.ratings.tsv'):
+	return pd.read_csv(path,sep='\t')
+
 def load_data():
 	data = load_flat_soundtracks().merge(load_subtitle_paths()).merge(load_audio_features())
 	subtitles = load_subtitles()
 	data.reset_index(inplace=True)
 	subtitles.reset_index(inplace=True)
 	data = data.merge(subtitles)
-  return data
+	data = fix_movie_ids(data)
+	data = data.merge(load_ratings(),left_on='movie_id',right_on='tconst')
+	return data
