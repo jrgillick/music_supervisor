@@ -40,6 +40,7 @@ def load_flat_soundtracks():
 def load_titles_basic_metadata(path = '/data/corpora/imdb/title.basics.tsv'):
   return pd.read_csv(path,sep='\t',low_memory=False)
 
+
 def add_metadata_to_data(data):
 	titles_metadata = load_titles_basic_metadata()
 	data = data.merge(titles_metadata,left_on='movie_id',right_on='tconst',how='inner')
@@ -77,6 +78,10 @@ def fix_movie_ids(data):
 def load_ratings(path='/data/corpora/imdb/title.ratings.tsv'):
 	return pd.read_csv(path,sep='\t')
 
+def load_titles_tm(path = '/data/corpora/imdb/tm/movie_doc_topics-25.txt'):
+  return pd.read_csv(path,sep='\t',low_memory=False)
+
+
 def load_data():
 	data = load_flat_soundtracks().merge(load_subtitle_paths()).merge(load_audio_features())
 	subtitles = load_subtitles()
@@ -85,5 +90,6 @@ def load_data():
 	data = data.merge(subtitles)
 	data = fix_movie_ids(data)
 	data = data.merge(load_ratings(),left_on='movie_id',right_on='tconst')
+	data = data.merge(load_titles_tm(),left_on='movie_id',right_on='tconst')
 	data = add_metadata_to_data(data)
 	return data
