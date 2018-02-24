@@ -5,6 +5,7 @@ def load_subtitle_paths():
 	return pd.read_table('/data/corpora/soundtracks/imdb.subtitles.first_paths',sep='\t',header=None,names=['movie_id','subtitle_path'])
 
 def load_subtitles():
+	print "Loading subtitles..."
 	lines = [{'movie_id': l.split('\t\t')[0], 'script': l.split('\t\t')[1]} for l in tqdm(open('/data/corpora/soundtracks/clean_subtitles.txt').read().split('\n')[0:-1])]
 	return pd.DataFrame(lines)
 
@@ -17,6 +18,7 @@ def load_audio_info(path):
 def load_audio_features():
 	root_audio_path = '/data/corpora/soundtracks/audio_info/'
 	all_audio_paths = [root_audio_path + f for f in os.listdir(root_audio_path)]
+	print "Loading audio features..."
 	infos = [load_audio_info(p) for p in tqdm(all_audio_paths)]
 	return pd.DataFrame(infos)
 
@@ -36,12 +38,25 @@ def load_flat_soundtracks():
 
 # load metadata from imdb dump of title.basics.tsv.gz
 def load_titles_basic_metadata(path = '/data/corpora/imdb/title.basics.tsv'):
-  return pd.read_csv(path,sep='\t')
+  return pd.read_csv(path,sep='\t',low_memory=False)
 
-def load_data_with_metadata():
-  data = load_data()
-  titles_metadata = load_titles_basic_metadata()
-  return data.merge(titles_metadata,left_on='movie_id',right_on='tconst',how='left')
+def add_metadata_to_data(data):
+	titles_metadata = load_titles_basic_metadata()
+	data = data.merge(titles_metadata,left_on='movie_id',right_on='tconst',how='inner')
+	all_genres = list(set(np.concatenate([g.split(',') for g in list(data.genres)])))
+	genre_list = []
+	print "Loading metadata..."
+	for i in tqdm(range(len(data))):
+		h = {}
+		row_genres = ['genre_' + g for g in data.genres[i].split(',')]
+		for r in row_genres:
+			h[r] = 1
+		genre_list.append(h)
+	genre_df = pd.DataFrame(genre_list)
+	genre_df.fillna(0,inplace=True)
+	data.reset_index(inplace=True)
+	genre_df.reset_index(inplace=True)
+	return data.merge(genre_df)
 
 def pad_id(m):
 	if len(m) == 9:
@@ -70,4 +85,5 @@ def load_data():
 	data = data.merge(subtitles)
 	data = fix_movie_ids(data)
 	data = data.merge(load_ratings(),left_on='movie_id',right_on='tconst')
+	data = add_metadata_to_data(data)
 	return data
