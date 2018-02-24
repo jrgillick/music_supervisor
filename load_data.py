@@ -1,9 +1,6 @@
 import os, json, pandas as pd, numpy as np
 from tqdm import tqdm
 
-def get_subtitle_path(movie_id):
-	return np.array(subtitle_paths[subtitle_paths['movie_id'] == movie_id])[0][1]
-
 def load_subtitle_paths():
 	return pd.read_table('/data/corpora/soundtracks/imdb.subtitles.first_paths',sep='\t',header=None,names=['movie_id','subtitle_path'])
 
@@ -36,10 +33,6 @@ def load_flat_soundtracks():
 			flat_tracks.append([movie_id, soundtrack_id])
 	df = pd.DataFrame(flat_tracks,columns=['movie_id','soundtrack_id'])
 	return df
-
-def get_audio_features(data, soundtrack_id):
-	audio_features = ['acousticness','danceability','duration_ms','energy','instrumentalness','key','liveness','loudness','mode','speechiness','tempo','time_signature','valence']
-	return np.array(data[data['soundtrack_id']=='6aNwvrNOT6NmcxWTHlVFSC'][audio_features])[0]
 
 # load metadata from imdb dump of title.basics.tsv.gz
 def load_titles_basic_metadata(path = '/data/corpora/imdb/title.basics.tsv'):
