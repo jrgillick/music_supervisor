@@ -7,6 +7,8 @@ import statsmodels.api as sm
 data = load_data.load_data()
 data.tempo /= np.max(data.tempo)
 
+treatment_variable="danceability"
+
 audio_features1 = ['mode','tempo','danceability','acousticness','instrumentalness']
 audio_features2 = ['acousticness','danceability','duration_ms','energy','instrumentalness','key','liveness','loudness','mode','speechiness','tempo','time_signature','valence']
 
@@ -18,6 +20,96 @@ topics=["topic-0-nice-bit", "topic-1-sir-dear", "topic-2-christmas-la", "topic-3
 genre_features = [d for d in list(data.columns) if 'genre_' in d]
 
 feats = audio_features1+genre_features+topics
+
+
+def cem(target_feature, X, y):
+	buckets=[]
+	for i in range(2):
+		buckets.append({})
+
+	# keep track of counts -- we want to have the same distribution of the treatment within each bucket
+	counts=np.zeros(2)
+
+	# get the highest scoring topics for each movie
+	argtopics=X[topics].idxmax(axis="columns")
+	for i, row in X.iterrows():
+		signature=[]
+		signature.append(argtopics[i])
+
+		# binarize the treatmenet variable (e.g., danceability)
+		target_val=row[target_feature]
+		if target_val > .5:
+			target_val=int(1)
+		else:
+			target_val=int(0)
+
+		counts[target_val]+=1
+
+		# binarize the other audio features; genre features are already binary
+		for feat in audio_features1:
+			if feat == target_feature:
+				continue
+			val=row[feat]
+			if val > .5:
+				val=1
+			else:
+				val=0
+			row[feat]=val
+			signature.append(val)
+		for feat in genre_features:
+			signature.append(row[feat])
+		sigstr=' '.join(str(x) for x in signature)
+
+		# the feature values define the bucket this point is placed into
+		if sigstr not in buckets[target_val]:
+			buckets[target_val][sigstr]={}
+		buckets[target_val][sigstr][i]=1
+
+	matchedids={}
+	f0=counts[0]/(counts[0]+counts[1])
+	f1=1-f0
+
+	for sigstring in buckets[0]:
+		if sigstring in buckets[1]:
+
+			# mininum of 5 points in each treatment condition within each bucket
+			if len(buckets[0][sigstring]) < 5 or len(buckets[1][sigstring]) < 5:
+				continue
+
+			# subsample points in bucket to reflect overall distribution of treatment in overall data
+			t0=len(buckets[0])*f0
+			t1=len(buckets[1])*f1
+
+			if t0 < 1 or t1 < 1:
+				continue
+
+			c=0
+			for idd in buckets[0][sigstring]:
+				matchedids[idd]=1
+				c+=1
+				if c >= t0:
+					break
+			c=0
+			for idd in buckets[1][sigstring]:
+				matchedids[idd]=1
+				c+=1
+				if c >= t1:
+					break
+			
+	# return subset of matched data and regress on that
+	return X.iloc[list(matchedids.keys())], y.iloc[list(matchedids.keys())]
+
+
+def run_regression_cem(treatment_variable, features):
+	X = data[features]
+	y = data.averageRating
+
+	X, y=cem(treatment_variable, X, y)
+	X_with_bias_term = sm.add_constant(X)
+	est = sm.OLS(y, X_with_bias_term)
+	fit = est.fit()
+	print(fit.summary())
+
 
 def run_regression_statsmodels(features):
 	X = data[features]
@@ -53,4 +145,4 @@ def run_regression(features):
 def test_significance(X,y,feature):
 	return stats.linregress(X[feature],y)
 
-run_regression_statsmodels(feats)
+run_regression_cem(treatment_variable, feats)

@@ -84,10 +84,10 @@ def load_titles_tm(path = '/data/corpora/imdb/tm/topics.50.txt'):
 
 def load_data():
 	data = load_flat_soundtracks().merge(load_subtitle_paths()).merge(load_audio_features())
-	subtitles = load_subtitles()
+	# subtitles = load_subtitles()
 	data.reset_index(inplace=True)
-	subtitles.reset_index(inplace=True)
-	data = data.merge(subtitles)
+	# subtitles.reset_index(inplace=True)
+	#data = data.merge(subtitles)
 	data = fix_movie_ids(data)
 	data = data.merge(load_ratings(),left_on='movie_id',right_on='tconst')
 	data = data.merge(load_titles_tm(),left_on='movie_id',right_on='tconst')
