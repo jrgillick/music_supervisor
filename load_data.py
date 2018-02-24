@@ -78,7 +78,7 @@ def fix_movie_ids(data):
 def load_ratings(path='/data/corpora/imdb/title.ratings.tsv'):
 	return pd.read_csv(path,sep='\t')
 
-def load_titles_tm(path = '/data/corpora/imdb/tm/movie_doc_topics-25.txt'):
+def load_titles_tm(path = '/data/corpora/imdb/tm/topics.50.txt'):
   return pd.read_csv(path,sep='\t',low_memory=False)
 
 
