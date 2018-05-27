@@ -1,0 +1,78 @@
+Loading audio features...
+Loading metadata...
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  tempo   R-squared:                       0.010
+Model:                            OLS   Adj. R-squared:                  0.009
+Method:                 Least Squares   F-statistic:                     37.73
+Date:                Mon, 16 Apr 2018   Prob (F-statistic):               0.00
+Time:                        14:41:48   Log-Likelihood:             1.3151e+05
+No. Observations:              188971   AIC:                        -2.629e+05
+Df Residuals:                  188921   BIC:                        -2.624e+05
+Df Model:                          49                                         
+Covariance Type:            nonrobust                                         
+=============================================================================================
+                                coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------
+const                         0.4939      0.000   1779.459      0.000       0.493       0.494
+topic-0-nice-bit          -9.513e-05      0.000     -0.321      0.748      -0.001       0.000
+topic-1-sir-dear             -0.0023      0.000     -7.913      0.000      -0.003      -0.002
+topic-2-christmas-la         -0.0012      0.000     -4.321      0.000      -0.002      -0.001
+topic-3-dad-mom              -0.0011      0.000     -3.923      0.000      -0.002      -0.001
+topic-4-sir-colonel           0.0026      0.000      9.340      0.000       0.002       0.003
+topic-5-um-work               0.0019      0.000      6.149      0.000       0.001       0.002
+topic-6-president-mr.         0.0010      0.000      3.619      0.000       0.000       0.002
+topic-7-japanese-dawson       0.0002      0.000      0.676      0.499      -0.000       0.001
+topic-8-unsub-garcia          0.0004      0.000      1.530      0.126      -0.000       0.001
+topic-9-game-team             0.0008      0.000      3.054      0.002       0.000       0.001
+topic-10-sir-captain         -0.0015      0.000     -5.367      0.000      -0.002      -0.001
+topic-11-mr.-court         6.587e-05      0.000      0.235      0.814      -0.000       0.001
+topic-12-boat-water       -7.879e-05      0.000     -0.281      0.779      -0.001       0.000
+topic-13-leave-understand    -0.0010      0.000     -3.361      0.001      -0.002      -0.000
+topic-14-fuck-shit            0.0008      0.000      2.928      0.003       0.000       0.001
+topic-15-war-country         -0.0010      0.000     -3.503      0.000      -0.002      -0.000
+topic-16-years-world         -0.0009      0.000     -2.959      0.003      -0.002      -0.000
+topic-17-plane-move           0.0008      0.000      2.920      0.003       0.000       0.001
+topic-18-captain-ship        -0.0051      0.000    -18.514      0.000      -0.006      -0.005
+topic-19-police-kill          0.0007      0.000      2.200      0.028    7.22e-05       0.001
+topic-20-bit-mum              0.0013      0.000      4.670      0.000       0.001       0.002
+topic-21-ah-aah               0.0002      0.000      0.692      0.489      -0.000       0.001
+topic-22-'t-narrator         -0.0006      0.000     -2.207      0.027      -0.001   -6.85e-05
+topic-23-sighs-chuckles      -0.0005      0.000     -1.936      0.053      -0.001     6.8e-06
+topic-24-ya-'em              -0.0002      0.000     -0.660      0.510      -0.001       0.000
+topic-25-remember-feel       -0.0019      0.000     -6.659      0.000      -0.002      -0.001
+topic-26-boy-huh             -0.0005      0.000     -1.656      0.098      -0.001    9.42e-05
+topic-27-mr.-sir             -0.0038      0.000    -12.552      0.000      -0.004      -0.003
+topic-28-dr.-doctor        7.556e-06      0.000      0.027      0.978      -0.001       0.001
+topic-29-father-lord       2.456e-05      0.000      0.087      0.931      -0.001       0.001
+topic-30-money-business       0.0005      0.000      1.608      0.108      -0.000       0.001
+topic-31-alright-lt           0.0007      0.000      2.666      0.008       0.000       0.001
+topic-32-sir-brother         -0.0001      0.000     -0.444      0.657      -0.001       0.000
+topic-33-school-class         0.0017      0.000      5.933      0.000       0.001       0.002
+topic-34-vic-jax             -0.0009      0.000     -3.373      0.001      -0.001      -0.000
+topic-35-gibbs-mcgee          0.0010      0.000      3.597      0.000       0.000       0.002
+topic-36-monsieur-madame     -0.0005      0.000     -1.839      0.066      -0.001    3.45e-05
+topic-37-baby-yo             -0.0019      0.000     -6.625      0.000      -0.002      -0.001
+topic-38-agent-security       0.0008      0.000      2.682      0.007       0.000       0.001
+topic-39-kill-dead            0.0017      0.000      6.084      0.000       0.001       0.002
+topic-40-music-show           0.0024      0.000      8.659      0.000       0.002       0.003
+topic-41-ofthe-thankyou      -0.0004      0.000     -1.478      0.139      -0.001       0.000
+topic-42-dude-cool            0.0029      0.000      9.665      0.000       0.002       0.003
+topic-43-spanish-el          -0.0003      0.000     -1.164      0.244      -0.001       0.000
+topic-44-eat-nice             0.0002      0.000      0.727      0.467      -0.000       0.001
+topic-45-murder-killed        0.0006      0.000      2.111      0.035    4.33e-05       0.001
+topic-46-car-drive            0.0011      0.000      4.016      0.000       0.001       0.002
+topic-47-town-horse          -0.0011      0.000     -3.839      0.000      -0.002      -0.001
+topic-48-film-movie           0.0003      0.000      1.204      0.228      -0.000       0.001
+topic-49-woman-married        0.0001      0.000      0.357      0.721      -0.000       0.001
+==============================================================================
+Omnibus:                     5535.957   Durbin-Watson:                   1.882
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             6035.465
+Skew:                           0.437   Prob(JB):                         0.00
+Kurtosis:                       2.954   Cond. No.                     4.03e+15
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 2.85e-26. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.

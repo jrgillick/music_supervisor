@@ -1,12 +1,13 @@
 import os, json, pandas as pd, numpy as np
 from tqdm import tqdm
 
-def load_subtitle_paths():
-	return pd.read_table('/data/corpora/soundtracks/imdb.subtitles.first_paths',sep='\t',header=None,names=['movie_id','subtitle_path'])
+#/data/corpora/soundtracks/imdb.subtitles.first_paths
+def load_subtitle_paths(path='imdb.subtitles.first_paths'):
+	return pd.read_table(path,sep='\t',header=None,names=['movie_id','subtitle_path'])
 
-def load_subtitles():
+def load_subtitles(path='clean_subtitles.txt'):
 	print "Loading subtitles..."
-	lines = [{'movie_id': l.split('\t\t')[0], 'script': l.split('\t\t')[1]} for l in tqdm(open('/data/corpora/soundtracks/clean_subtitles.txt').read().split('\n')[0:-1])]
+	lines = [{'movie_id': l.split('\t\t')[0], 'script': l.split('\t\t')[1]} for l in tqdm(open(path).read().split('\n')[0:-1])]
 	return pd.DataFrame(lines)
 
 def load_audio_info(path):
@@ -15,15 +16,16 @@ def load_audio_info(path):
 	h['soundtrack_id'] = soundtrack_id
 	return h
 
-def load_audio_features():
-	root_audio_path = '/data/corpora/soundtracks/audio_info/'
+# root_audio_path = '/data/corpora/soundtracks/audio_info/'
+def load_audio_features(root_audio_path):
 	all_audio_paths = [root_audio_path + f for f in os.listdir(root_audio_path)]
 	print "Loading audio features..."
 	infos = [load_audio_info(p) for p in tqdm(all_audio_paths)]
 	return pd.DataFrame(infos)
 
-def load_soundtracks(path='/data/corpora/soundtracks/imdb.soundtracks.txt'):
-	lines = [l.split('\t') for l in open('/data/corpora/soundtracks/imdb.soundtracks.txt').read().split('\n')][0:-1]
+#'/data/corpora/soundtracks/imdb.soundtracks.txt'
+def load_soundtracks(path='imdb.soundtracks.txt'):
+	lines = [l.split('\t') for l in open(path).read().split('\n')][0:-1]
 	return [{'movie_id': l[0], 'soundtrack_ids': l[1]} for l in lines]
 
 def load_flat_soundtracks():
@@ -37,9 +39,9 @@ def load_flat_soundtracks():
 	return df
 
 # load metadata from imdb dump of title.basics.tsv.gz
-def load_titles_basic_metadata(path = '/data/corpora/imdb/title.basics.tsv'):
+#path = '/data/corpora/imdb/title.basics.tsv'
+def load_titles_basic_metadata(path = 'title.basics.tsv'):
   return pd.read_csv(path,sep='\t',low_memory=False)
-
 
 def add_metadata_to_data(data):
 	titles_metadata = load_titles_basic_metadata()
@@ -75,12 +77,14 @@ def fix_movie_ids(data):
 	data.movie_id = movie_ids
 	return data
 
-def load_ratings(path='/data/corpora/imdb/title.ratings.tsv'):
+#data dump from imdb title.ratings.tsv
+#'/data/corpora/imdb/title.ratings.tsv'
+def load_ratings(path='title.ratings.tsv'):
 	return pd.read_csv(path,sep='\t')
 
-def load_titles_tm(path = '/data/corpora/imdb/tm/topics.50.txt'):
+#path = '/data/corpora/imdb/tm/topics.50.txt'
+def load_titles_tm(path = 'topics.50.txt'):
   return pd.read_csv(path,sep='\t',low_memory=False)
-
 
 def load_data():
 	data = load_flat_soundtracks()#.merge(load_subtitle_paths()).merge(load_audio_features())
