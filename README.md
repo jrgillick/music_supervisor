@@ -2,7 +2,7 @@
 
 This repository contains code and data for the experiments in our paper:
 
-Jon Gillick and David Bamman, "Telling Stories with Soundtracks: An Empirical Analysis of Music in Film ", NAACL 2018 Storytelling Workshop.
+Jon Gillick and David Bamman, "Telling Stories with Soundtracks: An Empirical Analysis of Music in Film ", NAACL 2018 Storytelling Workshop. Please cite this paper if you use the code.
 
 #### To run the experiments yourself, first follow these instructions for downloading additional data.
 
